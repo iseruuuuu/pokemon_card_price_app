@@ -32,11 +32,3 @@ flutter_icons:
 flutter:
   uses-material-design: true
   generate: true
-
-
-
-#flutter_icons:
-#  image_path: 'assets/app_icon.png'
-#  android: true
-#  ios: true
-#  macos: false
