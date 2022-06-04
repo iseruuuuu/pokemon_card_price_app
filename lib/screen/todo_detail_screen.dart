@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pokemon_card_price_app/model/pokemon_card.dart';
+import 'package:pokemon_card_price_app/model/todo.dart';
+import 'package:pokemon_card_price_app/parts/card_dialog.dart';
 import 'package:pokemon_card_price_app/parts/register_dialog.dart';
 import 'package:pokemon_card_price_app/state/todo_list_store.dart';
-import '../model/todo.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TodoDetailScreen extends StatefulWidget {
@@ -53,6 +54,8 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
       },
     );
   }
+
+  void openCardDialog() {}
 
   void onRegister() {
     _store.addCard(_shopName, _price, _isSale, widget.todo?.id);
@@ -135,36 +138,51 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
                         ),
                       ],
                     ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom:
-                              const BorderSide(color: Colors.grey, width: 3),
-                          top: index == 0
-                              ? const BorderSide(color: Colors.grey, width: 3)
-                              : const BorderSide(color: Colors.white),
-                        ),
-                      ),
-                      child: ListTile(
-                        title: Text(
-                          item.shopName,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
+                    child: GestureDetector(
+                      onLongPress: () async {
+                        showDialog<void>(
+                          context: context,
+                          builder: (_) {
+                            return CardDialog(
+                              shopName: item.shopName,
+                              price: item.price,
+                              createdTime: item.createDate,
+                              isSale: item.isSale,
+                            );
+                          },
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom:
+                                const BorderSide(color: Colors.grey, width: 3),
+                            top: index == 0
+                                ? const BorderSide(color: Colors.grey, width: 3)
+                                : const BorderSide(color: Colors.white),
                           ),
                         ),
-                        subtitle: Text(
-                          item.isSale ? '特価' : '',
-                          style: TextStyle(
-                            color: item.isSale ? Colors.red : Colors.white,
-                            fontSize: 15,
+                        child: ListTile(
+                          title: Text(
+                            item.shopName,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                            ),
                           ),
-                        ),
-                        trailing: Text(
-                          item.price + '円',
-                          style: const TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
+                          subtitle: Text(
+                            item.isSale ? '特価' : '',
+                            style: TextStyle(
+                              color: item.isSale ? Colors.red : Colors.white,
+                              fontSize: 15,
+                            ),
+                          ),
+                          trailing: Text(
+                            item.price + '円',
+                            style: const TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
