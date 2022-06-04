@@ -47,6 +47,7 @@ class RegisterDialog extends StatelessWidget {
           const SizedBox(height: 15),
           TextField(
             autofocus: true,
+            keyboardType: TextInputType.number,
             decoration: const InputDecoration(
               labelText: '値段',
               enabledBorder: OutlineInputBorder(
