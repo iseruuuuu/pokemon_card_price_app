@@ -1,37 +1,23 @@
+import 'package:flutter/material.dart';
+import 'package:pokemon_card_price_app/gen/assets.gen.dart';
 import 'package:pokemon_card_price_app/model/pokemon_card.dart';
+import 'package:pokemon_card_price_app/model/todo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
-import '../model/todo.dart';
 
-/// Todoストアのクラス
-///
-/// ※当クラスはシングルトンとなる
-///
-/// 以下の責務を持つ
-/// ・Todoを取得/追加/更新/削除/保存/読込する
 class TodoListStore {
-  /// 保存時のキー
   final String _saveKey = "Todo";
-
-  /// Todoリスト
   List<Todo> _list = [];
-
   List<PokemonCard> _cardList = [];
-
-  /// ストアのインスタンス
   static final TodoListStore _instance = TodoListStore._internal();
 
-  /// プライベートコンストラクタ
   TodoListStore._internal();
 
-  /// ファクトリーコンストラクタ
-  /// (インスタンスを生成しないコンストラクタのため、自分でインスタンスを生成する)
   factory TodoListStore() {
     return _instance;
   }
 
-  /// Todoの件数を取得する
   int count() {
     return _list.length;
   }
@@ -40,7 +26,6 @@ class TodoListStore {
     return _cardList.length;
   }
 
-  /// 指定したインデックスのTodoを取得する
   Todo findByIndex(int index) {
     return _list[index];
   }
@@ -49,7 +34,6 @@ class TodoListStore {
     return _cardList[index];
   }
 
-  /// "yyyy/MM/dd HH:mm"形式で日時を取得する
   String getDateTime() {
     var format = DateFormat("yyyy/MM/dd HH:mm");
     var dateTime = format.format(DateTime.now());
@@ -62,11 +46,26 @@ class TodoListStore {
     return dateTime;
   }
 
+  Widget ballItem(int ball) {
+    switch (ball) {
+      case 1:
+        return Assets.ball.ball1.image();
+      case 2:
+        return Assets.ball.ball2.image();
+      case 3:
+        return Assets.ball.ball3.image();
+      case 4:
+        return Assets.ball.ball4.image();
+      default:
+        return Assets.ball.ball5.image();
+    }
+  }
+
   /// Todoを追加する
-  void add(String title) {
+  void add(String title, int ball) {
     var id = count() == 0 ? 1 : _list.last.id + 1;
     var dateTime = getDateTime();
-    var todo = Todo(id, title, dateTime, dateTime);
+    var todo = Todo(id, title, dateTime, dateTime, ball);
     _list.add(todo);
     save();
   }
