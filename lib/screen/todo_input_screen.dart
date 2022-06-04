@@ -44,8 +44,6 @@ class _TodoInputScreenState extends State<TodoInputScreen> {
             const Spacer(),
             TextField(
               autofocus: true,
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               decoration: const InputDecoration(
                 labelText: "カード名",
                 enabledBorder: OutlineInputBorder(
