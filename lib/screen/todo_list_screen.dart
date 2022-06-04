@@ -108,12 +108,21 @@ class _TodoListScreenState extends State<TodoListScreen> {
                         _store.loadCard(item.id.toString());
                       },
                       child: ListTile(
-                        title: Text(
-                          item.title,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        title: Row(
+                          children: [
+                            SizedBox(
+                                width: 40,
+                                height: 40,
+                                child: _store.ballItem(item.ball)),
+                            const SizedBox(width: 10),
+                            Text(
+                              item.title,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                         trailing: const Icon(Icons.arrow_forward_ios),
                       ),
