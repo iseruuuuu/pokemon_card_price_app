@@ -55,7 +55,6 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
   }
 
   void onRegister() {
-    //TODO 登録する。
     _store.addCard(_shopName, _price, _isSale, widget.todo?.id);
     Navigator.of(context).pop();
     _shopName = "";
@@ -81,7 +80,6 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
     _price = value;
   }
 
-  /// 画面を作成する
   @override
   Widget build(BuildContext context) {
     return Scaffold(

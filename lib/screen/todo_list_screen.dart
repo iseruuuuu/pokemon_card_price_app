@@ -32,7 +32,6 @@ class _TodoListScreenState extends State<TodoListScreen> {
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
-          //TODO 後で記載する
           return TodoDetailScreen(
             todo: todo,
             pokemonCard: pokemonCard,
@@ -47,20 +46,15 @@ class _TodoListScreenState extends State<TodoListScreen> {
   @override
   void initState() {
     super.initState();
-
-    // _store.load();
     loadStore();
   }
 
   void loadStore() {
-    Future.delayed(
-      Duration.zero,
-      () {
-        setState(() {
-          _store.load();
-        });
-      },
-    );
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        _store.load();
+      });
+    });
   }
 
   @override
@@ -94,8 +88,9 @@ class _TodoListScreenState extends State<TodoListScreen> {
               children: [
                 SlidableAction(
                   onPressed: (context) {
-                    // Todoを削除し、画面を更新する
-                    setState(() => {_store.delete(item)});
+                    setState(() {
+                      _store.delete(item);
+                    });
                   },
                   backgroundColor: Colors.red,
                   icon: Icons.edit,
@@ -135,7 +130,6 @@ class _TodoListScreenState extends State<TodoListScreen> {
           );
         },
       ),
-      // Todo追加画面に遷移するボタン
       floatingActionButton: SizedBox(
         width: 90,
         height: 90,
