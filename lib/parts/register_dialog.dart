@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class RegisterDialog extends StatelessWidget {
+class RegisterDialog extends StatefulWidget {
   final Function() onRegister;
   final Function(bool?) onSale;
   final TextEditingController storeController;
   final TextEditingController priceController;
   final Function(String) onStoreChange;
   final Function(String) onPriceChange;
-  final bool isSale;
+  bool isSale;
 
-  const RegisterDialog({
+  RegisterDialog({
     required this.onRegister,
     required this.onSale,
     required this.storeController,
@@ -20,6 +20,11 @@ class RegisterDialog extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<RegisterDialog> createState() => _RegisterDialogState();
+}
+
+class _RegisterDialogState extends State<RegisterDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -41,8 +46,8 @@ class RegisterDialog extends StatelessWidget {
                 ),
               ),
             ),
-            controller: storeController,
-            onChanged: onStoreChange,
+            controller: widget.storeController,
+            onChanged: widget.onStoreChange,
           ),
           const SizedBox(height: 15),
           TextField(
@@ -61,8 +66,8 @@ class RegisterDialog extends StatelessWidget {
                 ),
               ),
             ),
-            controller: priceController,
-            onChanged: onPriceChange,
+            controller: widget.priceController,
+            onChanged: widget.onPriceChange,
           ),
           const SizedBox(height: 15),
           Row(
@@ -70,8 +75,13 @@ class RegisterDialog extends StatelessWidget {
             children: [
               const Text('特価'),
               Checkbox(
-                value: isSale,
-                onChanged: onSale,
+                value: widget.isSale,
+                onChanged: (value) {
+                  setState(() {
+                    widget.isSale = value!;
+                    widget.onSale(value);
+                  });
+                },
               ),
             ],
           ),
@@ -96,7 +106,7 @@ class RegisterDialog extends StatelessWidget {
               width: 100,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(elevation: 0),
-                onPressed: onRegister,
+                onPressed: widget.onRegister,
                 child: const Text('登録'),
               ),
             ),
