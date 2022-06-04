@@ -62,8 +62,6 @@ class _TodoInputScreenState extends State<TodoInputScreen> {
                 _title = value;
               },
             ),
-            const SizedBox(height: 20),
-            const SizedBox(height: 20),
             const Spacer(),
             SizedBox(
               width: double.infinity,
@@ -71,10 +69,8 @@ class _TodoInputScreenState extends State<TodoInputScreen> {
               child: ElevatedButton(
                 onPressed: () {
                   if (_isCreateTodo) {
-                    // Todoを追加する
                     _store.add(_title);
                   } else {
-                    // Todoを更新する
                     _store.update(widget.todo!, _title);
                   }
                   Navigator.of(context).pop();
