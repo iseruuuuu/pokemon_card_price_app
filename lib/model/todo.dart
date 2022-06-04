@@ -15,12 +15,16 @@ class Todo {
   /// 更新日時
   late String updateDate;
 
+  //ボールの種類
+  late int ball;
+
   /// コンストラクタ
   Todo(
     this.id,
     this.title,
     this.createDate,
     this.updateDate,
+    this.ball,
   );
 
   /// TodoモデルをMapに変換する(保存時に使用)
@@ -29,7 +33,8 @@ class Todo {
       'id': id,
       'title': title,
       'createDate': createDate,
-      'updateDate': updateDate
+      'updateDate': updateDate,
+      'ball': ball,
     };
   }
 
@@ -39,5 +44,6 @@ class Todo {
     title = json['title'];
     createDate = json['createDate'];
     updateDate = json['updateDate'];
+    ball = json['ball'];
   }
 }
