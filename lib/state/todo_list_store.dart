@@ -56,6 +56,12 @@ class TodoListStore {
     return dateTime;
   }
 
+  String getDate() {
+    var format = DateFormat("yyyy/MM/dd");
+    var dateTime = format.format(DateTime.now());
+    return dateTime;
+  }
+
   /// Todoを追加する
   void add(String title) {
     var id = count() == 0 ? 1 : _list.last.id + 1;
@@ -68,7 +74,7 @@ class TodoListStore {
   //PokemonCardを追加
   void addCard(String shopName, String price, bool isSale, int? cardID) {
     var id = count() == 0 ? 1 : _list.last.id + 1;
-    var createDate = getDateTime();
+    var createDate = getDate();
     var card = PokemonCard(id, shopName, price, isSale, createDate);
     _cardList.add(card);
     saveCard(cardID.toString());
@@ -104,7 +110,6 @@ class TodoListStore {
   }
 
   void saveCard(String password) async {
-    print(password);
     var prefs = await SharedPreferences.getInstance();
     // SharedPreferencesはプリミティブ型とString型リストしか扱えないため、以下の変換を行っている
     // TodoList形式 → Map形式 → JSON形式 → StrigList形式
