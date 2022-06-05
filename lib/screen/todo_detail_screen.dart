@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pokemon_card_price_app/model/todo.dart';
 import 'package:pokemon_card_price_app/parts/border_item.dart';
 import 'package:pokemon_card_price_app/parts/card_dialog.dart';
+import 'package:pokemon_card_price_app/parts/empty_screen.dart';
 import 'package:pokemon_card_price_app/parts/register_dialog.dart';
 import 'package:pokemon_card_price_app/state/todo_list_store.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -108,6 +109,7 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
                 itemCount: _store.cardCount(),
                 itemBuilder: (context, index) {
                   var item = _store.findCardByIndex(index);
+                  //TODO Cellが空になっているかどうかのチェックをできるようにする
                   return _store.cardCount() != 0
                       ? Slidable(
                           endActionPane: ActionPane(
@@ -176,7 +178,8 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
                             ),
                           ),
                         )
-                      : Container(color: Colors.red);
+                      //TODO リストが空の時の画面を作成する
+                      : const EmptyScreen();
                 },
               ),
             ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:pokemon_card_price_app/model/todo.dart';
 import 'package:pokemon_card_price_app/parts/border_item.dart';
+import 'package:pokemon_card_price_app/parts/delete_dialog.dart';
+import 'package:pokemon_card_price_app/parts/empty_screen.dart';
 import 'package:pokemon_card_price_app/screen/todo_detail_screen.dart';
 import 'package:pokemon_card_price_app/screen/todo_input_screen.dart';
 import 'package:pokemon_card_price_app/state/todo_list_store.dart';
@@ -81,15 +83,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                     extentRatio: 0.25,
                     children: [
                       SlidableAction(
-                        onPressed: (context) {
-                          _store.loadCard(item.id.toString());
-                          setState(() {
-                            _store.delete(
-                              todo: item,
-                              pokemonCard: _store.getCardList(),
-                            );
-                          });
-                        },
+                        onPressed: (context) {},
                         backgroundColor: Colors.red,
                         icon: Icons.edit,
                         label: '削除',
@@ -129,8 +123,8 @@ class _TodoListScreenState extends State<TodoListScreen> {
                     ),
                   ),
                 )
-              //TODOリストが空の時の画面を作成する
-              : Container(color: Colors.red);
+              //TODO リストが空の時の画面を作成する
+              : const EmptyScreen();
         },
       ),
       floatingActionButton: SizedBox(
