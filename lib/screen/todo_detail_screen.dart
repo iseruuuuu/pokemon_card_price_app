@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pokemon_card_price_app/model/todo.dart';
 import 'package:pokemon_card_price_app/parts/border_item.dart';
 import 'package:pokemon_card_price_app/parts/card_dialog.dart';
-import 'package:pokemon_card_price_app/parts/empty_screen.dart';
 import 'package:pokemon_card_price_app/parts/register_dialog.dart';
 import 'package:pokemon_card_price_app/state/todo_list_store.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -110,76 +109,72 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
                 itemBuilder: (context, index) {
                   var item = _store.findCardByIndex(index);
                   //TODO Cellが空になっているかどうかのチェックをできるようにする
-                  return _store.cardCount() != 0
-                      ? Slidable(
-                          endActionPane: ActionPane(
-                            motion: const ScrollMotion(),
-                            extentRatio: 0.25,
-                            children: [
-                              SlidableAction(
-                                onPressed: (context) {
-                                  setState(() {
-                                    _store.deleteCard(item);
-                                  });
-                                },
-                                backgroundColor: Colors.red,
-                                icon: Icons.edit,
-                                label: '削除',
-                              ),
-                            ],
-                          ),
-                          child: GestureDetector(
-                            onLongPress: () async {
-                              showDialog<void>(
-                                context: context,
-                                builder: (_) {
-                                  return StatefulBuilder(
-                                      builder: (context, setState) {
-                                    return CardDialog(
-                                      shopName: item.shopName,
-                                      price: item.price,
-                                      createdTime: item.createDate,
-                                      isSale: item.isSale,
-                                    );
-                                  });
-                                },
+                  return Slidable(
+                    endActionPane: ActionPane(
+                      motion: const ScrollMotion(),
+                      extentRatio: 0.25,
+                      children: [
+                        SlidableAction(
+                          onPressed: (context) {
+                            setState(() {
+                              _store.deleteCard(item);
+                            });
+                          },
+                          backgroundColor: Colors.red,
+                          icon: Icons.edit,
+                          label: '削除',
+                        ),
+                      ],
+                    ),
+                    child: GestureDetector(
+                      onLongPress: () async {
+                        showDialog<void>(
+                          context: context,
+                          builder: (_) {
+                            return StatefulBuilder(
+                                builder: (context, setState) {
+                              return CardDialog(
+                                shopName: item.shopName,
+                                price: item.price,
+                                createdTime: item.createDate,
+                                isSale: item.isSale,
                               );
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: index == 0
-                                    ? BorderItem.borderFirst()
-                                    : BorderItem.borderOther(),
-                              ),
-                              child: ListTile(
-                                title: Text(
-                                  item.shopName,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  item.isSale ? '特価' : '',
-                                  style: TextStyle(
-                                    color:
-                                        item.isSale ? Colors.red : Colors.white,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                trailing: Text(
-                                  item.price + '円',
-                                  style: const TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
+                            });
+                          },
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: index == 0
+                              ? BorderItem.borderFirst()
+                              : BorderItem.borderOther(),
+                        ),
+                        child: ListTile(
+                          title: Text(
+                            item.shopName,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
                             ),
                           ),
-                        )
-                      //TODO リストが空の時の画面を作成する
-                      : const EmptyScreen();
+                          subtitle: Text(
+                            item.isSale ? '特価' : '',
+                            style: TextStyle(
+                              color: item.isSale ? Colors.red : Colors.white,
+                              fontSize: 15,
+                            ),
+                          ),
+                          trailing: Text(
+                            item.price + '円',
+                            style: const TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
                 },
               ),
             ),
