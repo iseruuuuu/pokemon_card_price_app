@@ -10,19 +10,18 @@ class EmptyScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Spacer(),
           const Text(
-            '＋で追加しよう',
+            '＋でカードを追加しよう',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 35,
+              fontSize: 30,
             ),
           ),
+          SizedBox(height: 30),
           Assets.images.appIcon.image(
-            width: 140,
-            height: 140,
+            width: 200,
+            height: 200,
           ),
-          const Spacer(),
         ],
       ),
     );
