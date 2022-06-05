@@ -36,6 +36,7 @@
 - [x] TODOリストを削除するとCardListも削除できるようにする。
 - [x] iOSアプリのBundle Identifierを変更した
 - [x] 対象をiPhoneのみにした
+- [x] 端末の方向を縦のみにした
 
 ## 具体的な解決方法
 
