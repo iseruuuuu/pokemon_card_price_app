@@ -34,6 +34,10 @@ class TodoListStore {
     return _list;
   }
 
+  List<PokemonCard> getCard() {
+    return _cardList;
+  }
+
   PokemonCard findCardByIndex(int index) {
     return _cardList[index];
   }
@@ -144,6 +148,16 @@ class TodoListStore {
       newIndex -= 1;
     }
     todo.insert(newIndex, todo.removeAt(oldIndex));
+    save();
+  }
+
+  void onCardReorder(
+      List<PokemonCard> pokemonCard, int oldIndex, int newIndex, int cardID) {
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    pokemonCard.insert(newIndex, pokemonCard.removeAt(oldIndex));
+    saveCard(cardID.toString());
     save();
   }
 }

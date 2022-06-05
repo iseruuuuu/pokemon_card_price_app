@@ -104,17 +104,28 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
               height: 150,
             ),
             Expanded(
-              child: ListView.builder(
+              child: ReorderableListView.builder(
+                onReorder: (int oldIndex, int newIndex) {
+                  _store.onCardReorder(
+                    _store.getCard(),
+                    oldIndex,
+                    newIndex,
+                    widget.todo!.id,
+                  );
+                },
                 itemCount: _store.cardCount(),
                 itemBuilder: (context, index) {
                   var item = _store.findCardByIndex(index);
                   //TODO Cellが空になっているかどうかのチェックをできるようにする
                   return Slidable(
+                    key: ValueKey(index),
                     endActionPane: ActionPane(
+                      key: ValueKey(index),
                       motion: const ScrollMotion(),
                       extentRatio: 0.25,
                       children: [
                         SlidableAction(
+                          key: ValueKey(index),
                           onPressed: (context) {
                             setState(() {
                               _store.deleteCard(item);
@@ -127,7 +138,7 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
                       ],
                     ),
                     child: GestureDetector(
-                      onLongPress: () async {
+                      onTap: () async {
                         showDialog<void>(
                           context: context,
                           builder: (_) {
@@ -150,6 +161,7 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
                               : BorderItem.borderOther(),
                         ),
                         child: ListTile(
+                          key: ValueKey(index),
                           title: Text(
                             item.shopName,
                             style: const TextStyle(
