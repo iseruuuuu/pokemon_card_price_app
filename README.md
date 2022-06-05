@@ -35,6 +35,7 @@
 - [x] Cardリスト画面が空の時の画面を作成した。
 - [x] TODOリストを削除するとCardListも削除できるようにする。
 - [x] iOSアプリのBundle Identifierを変更した
+- [x] 対象をiPhoneのみにした
 
 ## 具体的な解決方法
 
