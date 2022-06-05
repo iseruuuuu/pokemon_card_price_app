@@ -58,16 +58,22 @@ class _TodoListScreenState extends State<TodoListScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(elevation: 0),
-      body: ListView.builder(
+      body: ReorderableListView.builder(
+        onReorder: (int oldIndex, int newIndex) {
+          _store.onReorder(_store.getTodo(), oldIndex, newIndex);
+        },
         itemCount: _store.count(),
         itemBuilder: (context, index) {
           var item = _store.findByIndex(index);
           return Slidable(
+            key: ValueKey(index),
             startActionPane: ActionPane(
+              key: ValueKey(index),
               motion: const ScrollMotion(),
               extentRatio: 0.25,
               children: [
                 SlidableAction(
+                  key: ValueKey(index),
                   onPressed: (context) {
                     _pushTodoInputPage(item);
                   },
@@ -78,10 +84,12 @@ class _TodoListScreenState extends State<TodoListScreen> {
               ],
             ),
             endActionPane: ActionPane(
+              key: ValueKey(index),
               motion: const ScrollMotion(),
               extentRatio: 0.25,
               children: [
                 SlidableAction(
+                  key: ValueKey(index),
                   onPressed: (context) {
                     _store.loadCard(item.id.toString());
                     showDialog<void>(
@@ -117,12 +125,16 @@ class _TodoListScreenState extends State<TodoListScreen> {
                   _store.loadCard(item.id.toString());
                 },
                 child: ListTile(
+                  key: ValueKey(index),
                   title: Row(
                     children: [
                       SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: _store.ballItem(item.ball)),
+                        width: 40,
+                        height: 40,
+                        child: _store.ballItem(
+                          item.ball,
+                        ),
+                      ),
                       const SizedBox(width: 10),
                       Text(
                         item.title,

@@ -30,6 +30,10 @@ class TodoListStore {
     return _list[index];
   }
 
+  List<Todo> getTodo() {
+    return _list;
+  }
+
   PokemonCard findCardByIndex(int index) {
     return _cardList[index];
   }
@@ -133,5 +137,13 @@ class TodoListStore {
     _cardList = loadTargetList
         .map((a) => PokemonCard.fromJson(json.decode(a)))
         .toList();
+  }
+
+  void onReorder(List<Todo> todo, int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    todo.insert(newIndex, todo.removeAt(oldIndex));
+    save();
   }
 }
