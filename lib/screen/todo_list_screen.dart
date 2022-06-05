@@ -83,7 +83,23 @@ class _TodoListScreenState extends State<TodoListScreen> {
                     extentRatio: 0.25,
                     children: [
                       SlidableAction(
-                        onPressed: (context) {},
+                        onPressed: (context) {
+                          _store.loadCard(item.id.toString());
+                          showDialog<void>(
+                            context: context,
+                            builder: (_) {
+                              return DeleteDialog(
+                                onDelete: () {
+                                  setState(() {
+                                    _store.delete(
+                                      todo: item,
+                                    );
+                                  });
+                                },
+                              );
+                            },
+                          );
+                        },
                         backgroundColor: Colors.red,
                         icon: Icons.edit,
                         label: '削除',

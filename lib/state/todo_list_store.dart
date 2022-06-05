@@ -61,7 +61,6 @@ class TodoListStore {
     }
   }
 
-  /// Todoを追加する
   void add(String title, int ball) {
     var id = count() == 0 ? 1 : _list.last.id + 1;
     var dateTime = getDateTime();
@@ -70,7 +69,6 @@ class TodoListStore {
     save();
   }
 
-  //PokemonCardを追加
   void addCard(String shopName, String price, bool isSale, int? cardID) {
     var id = count() == 0 ? 1 : _list.last.id + 1;
     var createDate = getDate();
@@ -79,7 +77,6 @@ class TodoListStore {
     saveCard(cardID.toString());
   }
 
-  /// Todoを更新する
   void update(Todo todo, [String? title]) {
     if (title != null) {
       todo.title = title;
@@ -88,10 +85,15 @@ class TodoListStore {
     save();
   }
 
-  /// Todoを削除する
-  void delete(Todo todo) {
+  void delete({required Todo todo}) {
+    deleteAllCard(index: todo.id);
     _list.remove(todo);
     save();
+  }
+
+  void deleteAllCard({required int index}) {
+    _cardList.clear();
+    saveCard(index.toString());
   }
 
   void deleteCard(PokemonCard pokemonCard) {
@@ -99,7 +101,6 @@ class TodoListStore {
     saveCard(pokemonCard.id.toString());
   }
 
-  /// Todoを保存する
   void save() async {
     var prefs = await SharedPreferences.getInstance();
     // SharedPreferencesはプリミティブ型とString型リストしか扱えないため、以下の変換を行っている
@@ -116,7 +117,6 @@ class TodoListStore {
     prefs.setStringList(password, saveTargetList);
   }
 
-  /// Todoを読込する
   void load() async {
     var prefs = await SharedPreferences.getInstance();
     // SharedPreferencesはプリミティブ型とString型リストしか扱えないため、以下の変換を行っている
