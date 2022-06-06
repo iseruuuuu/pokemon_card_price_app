@@ -171,6 +171,9 @@ class TodoListStore {
         break;
       case 1:
         //店名（abc or あいうえお順）
+        _cardList.sort((a, b) => a.shopName.compareTo(b.shopName));
+        save();
+        saveCard(todoID.toString());
         break;
       case 2:
         //価格の安い順
