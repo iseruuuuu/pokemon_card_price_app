@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:pokemon_card_price_app/gen/assets.gen.dart';
 import 'package:pokemon_card_price_app/model/todo.dart';
 import 'package:pokemon_card_price_app/parts/border_item.dart';
 import 'package:pokemon_card_price_app/parts/delete_dialog.dart';
@@ -56,8 +57,15 @@ class _TodoListScreenState extends State<TodoListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(elevation: 0),
+      backgroundColor: Colors.grey.shade100,
+      appBar: AppBar(
+        elevation: 0,
+        flexibleSpace: Image(
+          image: Assets.images.appBar1,
+          fit: BoxFit.cover,
+        ),
+        backgroundColor: Colors.transparent,
+      ),
       body: ReorderableListView.builder(
         onReorder: (int oldIndex, int newIndex) {
           _store.onReorder(_store.getTodo(), oldIndex, newIndex);
@@ -125,6 +133,12 @@ class _TodoListScreenState extends State<TodoListScreen> {
                   _store.loadCard(item.id.toString());
                 },
                 child: ListTile(
+                  contentPadding: const EdgeInsets.only(
+                    left: 15,
+                    right: 10,
+                    top: 5,
+                    bottom: 5,
+                  ),
                   key: ValueKey(index),
                   title: Row(
                     children: [
@@ -135,7 +149,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                           item.ball,
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 15),
                       Text(
                         item.title,
                         style: const TextStyle(
@@ -145,7 +159,10 @@ class _TodoListScreenState extends State<TodoListScreen> {
                       ),
                     ],
                   ),
-                  trailing: const Icon(Icons.arrow_forward_ios),
+                  trailing: const Icon(
+                    Icons.list,
+                    size: 35,
+                  ),
                 ),
               ),
             ),
@@ -153,13 +170,14 @@ class _TodoListScreenState extends State<TodoListScreen> {
         },
       ),
       floatingActionButton: SizedBox(
-        width: 90,
-        height: 90,
+        width: 85,
+        height: 85,
         child: FloatingActionButton(
+          backgroundColor: Colors.red,
           onPressed: _pushTodoInputPage,
           child: const Icon(
             Icons.add,
-            size: 50,
+            size: 60,
           ),
         ),
       ),

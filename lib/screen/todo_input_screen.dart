@@ -94,109 +94,120 @@ class _TodoInputScreenState extends State<TodoInputScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(_isCreateTodo ? 'カード追加' : 'カード更新'),
         elevation: 0,
       ),
-      body: Container(
-        padding: const EdgeInsets.all(30),
-        child: Column(
-          children: <Widget>[
-            const Spacer(),
-            TextField(
-              autofocus: true,
-              decoration: const InputDecoration(
-                labelText: "カード名",
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.blue,
+      body: CustomScrollView(
+        scrollDirection: Axis.vertical,
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Padding(
+              padding: const EdgeInsets.all(30),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  TextField(
+                    maxLength: 12,
+                    autofocus: true,
+                    decoration: const InputDecoration(
+                      labelText: "カード名",
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.blue,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
+                    controller: TextEditingController(text: _title),
+                    onChanged: (String value) {
+                      _title = value;
+                    },
                   ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.blue,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ImageButton(
+                        isSelected: ball1,
+                        image: Assets.ball.ball1.image(),
+                        onTap: () => selectBall(1),
+                      ),
+                      ImageButton(
+                        isSelected: ball2,
+                        image: Assets.ball.ball2.image(),
+                        onTap: () => selectBall(2),
+                      ),
+                      ImageButton(
+                        isSelected: ball3,
+                        image: Assets.ball.ball3.image(),
+                        onTap: () => selectBall(3),
+                      ),
+                      ImageButton(
+                        isSelected: ball4,
+                        image: Assets.ball.ball4.image(),
+                        onTap: () => selectBall(4),
+                      ),
+                    ],
                   ),
-                ),
+                  Column(
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        height: 60,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (_isCreateTodo) {
+                              _store.add(_title, _ball);
+                            } else {
+                              _store.update(widget.todo!, _title);
+                            }
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text(
+                            '追加',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 50),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 60,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.white,
+                            side: const BorderSide(
+                              color: Colors.blue,
+                            ),
+                          ),
+                          child: const Text(
+                            "キャンセル",
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              controller: TextEditingController(text: _title),
-              onChanged: (String value) {
-                _title = value;
-              },
             ),
-            const Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ImageButton(
-                  isSelected: ball1,
-                  image: Assets.ball.ball1.image(),
-                  onTap: () => selectBall(1),
-                ),
-                ImageButton(
-                  isSelected: ball2,
-                  image: Assets.ball.ball2.image(),
-                  onTap: () => selectBall(2),
-                ),
-                ImageButton(
-                  isSelected: ball3,
-                  image: Assets.ball.ball3.image(),
-                  onTap: () => selectBall(3),
-                ),
-                ImageButton(
-                  isSelected: ball4,
-                  image: Assets.ball.ball4.image(),
-                  onTap: () => selectBall(4),
-                ),
-              ],
-            ),
-            const Spacer(),
-            SizedBox(
-              width: double.infinity,
-              height: 60,
-              child: ElevatedButton(
-                onPressed: () {
-                  if (_isCreateTodo) {
-                    _store.add(_title, _ball);
-                  } else {
-                    _store.update(widget.todo!, _title);
-                  }
-                  Navigator.of(context).pop();
-                },
-                child: const Text(
-                  '追加',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 50),
-            SizedBox(
-              width: double.infinity,
-              height: 60,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
-                  side: const BorderSide(
-                    color: Colors.blue,
-                  ),
-                ),
-                child: const Text(
-                  "キャンセル",
-                  style: TextStyle(
-                    color: Colors.blue,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-            ),
-            const Spacer(),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

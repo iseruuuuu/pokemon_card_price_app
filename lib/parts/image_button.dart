@@ -17,7 +17,7 @@ class ImageButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        color: isSelected ? Colors.green : Colors.transparent,
+        color: isSelected ? Colors.red : Colors.transparent,
         child: image,
       ),
     );

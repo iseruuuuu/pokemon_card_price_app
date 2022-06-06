@@ -37,4 +37,5 @@ flutter:
   generate: true
   assets:
     - assets/images/app_icon.png
+    - assets/images/app_bar_1.jpeg
     - assets/ball/

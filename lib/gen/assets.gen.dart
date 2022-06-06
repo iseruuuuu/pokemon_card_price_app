@@ -62,6 +62,10 @@ class $AssetsBallGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/app_bar_1.jpeg
+  AssetGenImage get appBar1 =>
+      const AssetGenImage('assets/images/app_bar_1.jpeg');
+
   /// File path: assets/images/app_icon.png
   AssetGenImage get appIcon =>
       const AssetGenImage('assets/images/app_icon.png');
