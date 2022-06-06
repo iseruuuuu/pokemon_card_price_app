@@ -20,7 +20,6 @@
 - [ ] TODOリストの「登録順」にSortできるようにする。
 - [ ] TODOリストの「名前順」にSortできるようにする。
 - [ ] TODOリストの「ボール順」にSortできるようにする。
-- [ ] Cardリストの「あいうえお順」にSortできるようにする。
 - [ ] Cardリストの「店名」で 検索できるようにする。
 
 ## やることリスト(iOS)
@@ -66,10 +65,13 @@
 - [x] Cardリストの「価格の安い順」にSortできるようにした。
 - [x] Cardリストの「価格の高い順」にSortできるようにした。
 - [x] Cardリストの「特価順」にSortできるようにした。
+- [x] Cardリストの「あいうえお順」にSortできるようにした。
 
 ## 具体的な解決方法
 
 ## 参考になったサイト一覧
+・Listを複数値でsort
+[https://zenn.dev/kazukidddd/articles/c2bc92e8a6f0c0]
 
 # pokemon_card_price_app
 
