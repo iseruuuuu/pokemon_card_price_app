@@ -49,7 +49,8 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
   }
 
   void onRegister() {
-    _store.addCard(_shopName, _price, _isSale, widget.todo?.id);
+    var price = int.parse(_price);
+    _store.addCard(_shopName, price, _isSale, widget.todo?.id);
     Navigator.of(context).pop();
     resetCard();
     setState(() {});
@@ -224,7 +225,8 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
                             ),
                           ),
                           trailing: Text(
-                            item.price + '円',
+                            // item.price + '円',
+                            '${item.price}円',
                             style: const TextStyle(
                               fontSize: 25,
                               fontWeight: FontWeight.bold,

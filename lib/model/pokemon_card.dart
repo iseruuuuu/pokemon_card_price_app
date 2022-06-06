@@ -5,7 +5,7 @@ class PokemonCard {
   /// お店名
   late String shopName;
 
-  late String price;
+  late int price;
 
   //セールかどうか
   late bool isSale;

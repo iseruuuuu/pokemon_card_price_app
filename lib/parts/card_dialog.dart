@@ -3,7 +3,7 @@ import 'package:pokemon_card_price_app/parts/children/dialog_text.dart';
 
 class CardDialog extends StatelessWidget {
   final String shopName;
-  final String price;
+  final int price;
   final String createdTime;
   final bool isSale;
 
@@ -21,7 +21,7 @@ class CardDialog extends StatelessWidget {
       title: Column(
         children: [
           DialogText(title: '店舗名', subTitle: shopName),
-          DialogText(title: '金額', subTitle: price + '円'),
+          DialogText(title: '金額', subTitle: '$price円'),
           DialogText(title: '登録日', subTitle: createdTime),
           DialogText(
             title: '',
