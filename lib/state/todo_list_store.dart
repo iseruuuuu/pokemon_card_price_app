@@ -165,7 +165,7 @@ class TodoListStore {
     switch (selectSort) {
       case 0:
         //新しい順
-        _cardList.sort((a, b) => a.id.compareTo(b.id));
+        _cardList.sort((a, b) => b.id.compareTo(a.id));
         save();
         saveCard(todoID.toString());
         break;
@@ -186,6 +186,13 @@ class TodoListStore {
         break;
       case 4:
         //特価順（特価のみを上にする。その他の順番は気にしない）
+        _cardList.sort((a, b) {
+          int result = b.isSale.toString().compareTo(a.isSale.toString());
+          if (result != 0) return result;
+          return a.price.compareTo(b.price);
+        });
+        save();
+        saveCard(todoID.toString());
         break;
       default:
         break;
