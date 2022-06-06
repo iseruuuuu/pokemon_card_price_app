@@ -11,6 +11,8 @@ class TodoListStore {
   List<Todo> _list = [];
   List<PokemonCard> _cardList = [];
   static final TodoListStore _instance = TodoListStore._internal();
+  List<PokemonCard> _searchCardList = [];
+  bool isSearchEmpty = false;
 
   TodoListStore._internal();
 
@@ -24,6 +26,10 @@ class TodoListStore {
 
   int cardCount() {
     return _cardList.length;
+  }
+
+  int searchCardCount() {
+    return _searchCardList.length;
   }
 
   Todo findByIndex(int index) {
@@ -40,6 +46,14 @@ class TodoListStore {
 
   PokemonCard findCardByIndex(int index) {
     return _cardList[index];
+  }
+
+  List<PokemonCard> getSearchCard() {
+    return _searchCardList;
+  }
+
+  PokemonCard findSearchByIndex(int index) {
+    return _searchCardList[index];
   }
 
   String getDateTime() {
@@ -200,5 +214,25 @@ class TodoListStore {
       default:
         break;
     }
+  }
+
+  void searchCard(String text, String todoID) {
+    _searchCardList = [];
+    for (int i = 0; i < _cardList.length; i++) {
+      if (_cardList[i].shopName.contains(text)) {
+        var cardList = _cardList[i];
+        _searchCardList.add(cardList);
+      }
+    }
+    if (_searchCardList.isEmpty) {
+      isSearchEmpty = true;
+    } else {
+      isSearchEmpty = false;
+    }
+  }
+
+  void resetSearchCardList() {
+    _searchCardList = [];
+    isSearchEmpty = false;
   }
 }

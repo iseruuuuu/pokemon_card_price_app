@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pokemon_card_price_app/model/todo.dart';
 import 'package:pokemon_card_price_app/parts/border_item.dart';
 import 'package:pokemon_card_price_app/parts/card_dialog.dart';
+import 'package:pokemon_card_price_app/parts/empty_search_screen.dart';
 import 'package:pokemon_card_price_app/parts/register_dialog.dart';
 import 'package:pokemon_card_price_app/state/todo_list_store.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -24,6 +25,18 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
   late String _shopName;
   late String _price;
   late bool _isSale;
+  late TextEditingController searchTextController;
+  var selectSort = 2;
+  var searchWord = '';
+  bool isSearch = false;
+
+  final sort = [
+    "新しい順",
+    "あいうえお順",
+    "価格の安い順",
+    "価格の高い順",
+    "特価順",
+  ];
 
   @override
   void initState() {
@@ -74,16 +87,37 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
     _shopName = "";
     _price = "";
     _isSale = false;
+    searchTextController = TextEditingController(text: searchWord);
   }
 
-  final sort = [
-    "新しい順",
-    "あいうえお順",
-    "価格の安い順",
-    "価格の高い順",
-    "特価順",
-  ];
-  var selectSort = 2;
+  void search(String value) {
+    searchWord = value;
+    if (searchWord.isEmpty) {
+      isSearch = false;
+      _store.resetSearchCardList();
+    } else {
+      isSearch = true;
+      _store.searchCard(
+        searchWord,
+        widget.todo!.id.toString(),
+      );
+    }
+    setState(() {});
+  }
+
+  void reset() {
+    setState(() {
+      isSearch = false;
+      searchTextController.text = '';
+    });
+    _store.resetSearchCardList();
+  }
+
+  @override
+  void dispose() {
+    searchTextController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +142,45 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            Container(
+              width: double.infinity,
+              height: 80,
+              color: Colors.black12,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width / 1.3,
+                    color: Colors.white,
+                    child: TextField(
+                      maxLength: 12,
+                      autocorrect: false,
+                      textInputAction: TextInputAction.search,
+                      decoration: const InputDecoration(
+                        counterText: '',
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.black12,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.black12,
+                          ),
+                        ),
+                      ),
+                      controller: searchTextController,
+                      onChanged: search,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: reset,
+                    iconSize: 40,
+                    icon: const Icon(Icons.close),
+                  ),
+                ],
+              ),
+            ),
             Container(
               color: Colors.white,
               width: double.infinity,
@@ -152,96 +225,162 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
               ),
             ),
             Expanded(
-              child: ReorderableListView.builder(
-                onReorder: (int oldIndex, int newIndex) {
-                  _store.onCardReorder(
-                    _store.getCard(),
-                    oldIndex,
-                    newIndex,
-                    widget.todo!.id,
-                  );
-                },
-                itemCount: _store.cardCount(),
-                itemBuilder: (context, index) {
-                  var item = _store.findCardByIndex(index);
-                  //TODO Cellが空になっているかどうかのチェックをできるようにする
-                  return Slidable(
-                    key: ValueKey(index),
-                    endActionPane: ActionPane(
-                      key: ValueKey(index),
-                      motion: const ScrollMotion(),
-                      extentRatio: 0.25,
-                      children: [
-                        SlidableAction(
-                          key: ValueKey(index),
-                          onPressed: (context) {
-                            setState(() {
-                              _store.deleteCard(item);
-                            });
-                          },
-                          backgroundColor: Colors.red,
-                          icon: Icons.edit,
-                          label: '削除',
-                        ),
-                      ],
-                    ),
-                    child: GestureDetector(
-                      onTap: () async {
-                        showDialog<void>(
-                          context: context,
-                          builder: (_) {
-                            return StatefulBuilder(
-                                builder: (context, setState) {
-                              return CardDialog(
-                                shopName: item.shopName,
-                                price: item.price,
-                                createdTime: item.createDate,
-                                isSale: item.isSale,
-                              );
-                            });
-                          },
-                        );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: index == 0
-                              ? BorderItem.borderFirst()
-                              : BorderItem.borderOther(),
-                        ),
-                        child: ListTile(
-                          key: ValueKey(index),
-                          title: Text(
-                            item.shopName,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                            ),
-                          ),
-                          subtitle: Text(
-                            item.isSale ? '特価' : '',
-                            style: TextStyle(
-                              color: item.isSale ? Colors.red : Colors.white,
-                              fontSize: 15,
-                            ),
-                          ),
-                          trailing: Text(
-                            // item.price + '円',
-                            '${item.price}円',
-                            style: const TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
+              child: _store.isSearchEmpty
+                  ? const EmptySearchScreen()
+                  : !isSearch
+                      ? defaultListView()
+                      : searchListView(),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  ReorderableListView defaultListView() {
+    return ReorderableListView.builder(
+      onReorder: (int oldIndex, int newIndex) {
+        _store.onCardReorder(
+          _store.getCard(),
+          oldIndex,
+          newIndex,
+          widget.todo!.id,
+        );
+      },
+      itemCount: _store.cardCount(),
+      itemBuilder: (context, index) {
+        var item = _store.findCardByIndex(index);
+        //TODO Cellが空になっているかどうかのチェックをできるようにする
+        return Slidable(
+          key: ValueKey(index),
+          endActionPane: ActionPane(
+            key: ValueKey(index),
+            motion: const ScrollMotion(),
+            extentRatio: 0.25,
+            children: [
+              SlidableAction(
+                key: ValueKey(index),
+                onPressed: (context) {
+                  setState(() {
+                    _store.deleteCard(item);
+                  });
+                },
+                backgroundColor: Colors.red,
+                icon: Icons.edit,
+                label: '削除',
+              ),
+            ],
+          ),
+          child: GestureDetector(
+            onTap: () async {
+              showDialog<void>(
+                context: context,
+                builder: (_) {
+                  return StatefulBuilder(builder: (context, setState) {
+                    return CardDialog(
+                      shopName: item.shopName,
+                      price: item.price,
+                      createdTime: item.createDate,
+                      isSale: item.isSale,
+                    );
+                  });
+                },
+              );
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                border: index == 0
+                    ? BorderItem.borderFirst()
+                    : BorderItem.borderOther(),
+              ),
+              child: ListTile(
+                key: ValueKey(index),
+                title: Text(
+                  item.shopName,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                ),
+                subtitle: Text(
+                  item.isSale ? '特価' : '',
+                  style: TextStyle(
+                    color: item.isSale ? Colors.red : Colors.white,
+                    fontSize: 15,
+                  ),
+                ),
+                trailing: Text(
+                  // item.price + '円',
+                  '${item.price}円',
+                  style: const TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  ListView searchListView() {
+    return ListView.builder(
+      itemCount: _store.searchCardCount(),
+      itemBuilder: (context, index) {
+        var item = _store.findSearchByIndex(index);
+        //TODO Cellが空になっているかどうかのチェックをできるようにする
+        return GestureDetector(
+          onTap: () async {
+            showDialog<void>(
+              context: context,
+              builder: (_) {
+                return StatefulBuilder(builder: (context, setState) {
+                  return CardDialog(
+                    shopName: item.shopName,
+                    price: item.price,
+                    createdTime: item.createDate,
+                    isSale: item.isSale,
+                  );
+                });
+              },
+            );
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              border: index == 0
+                  ? BorderItem.borderFirst()
+                  : BorderItem.borderOther(),
+            ),
+            child: ListTile(
+              key: ValueKey(index),
+              title: Text(
+                item.shopName,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
+              ),
+              subtitle: Text(
+                item.isSale ? '特価' : '',
+                style: TextStyle(
+                  color: item.isSale ? Colors.red : Colors.white,
+                  fontSize: 15,
+                ),
+              ),
+              trailing: Text(
+                // item.price + '円',
+                '${item.price}円',
+                style: const TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
