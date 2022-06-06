@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pokemon_card_price_app/model/todo.dart';
 import 'package:pokemon_card_price_app/parts/border_item.dart';
@@ -74,6 +75,15 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
     _isSale = false;
   }
 
+  final sort = [
+    "新しい順",
+    "あいうえお順",
+    "価格の安い順",
+    "価格の高い順",
+    "特価順",
+  ];
+  var selectSort = 2;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,11 +107,48 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            const SizedBox(height: 10),
-            Image.asset(
-              'assets/images/app_icon.png',
-              width: 150,
+            Container(
+              color: Colors.white,
+              width: double.infinity,
               height: 150,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(
+                    height: 200,
+                    width: 250,
+                    child: CupertinoPicker(
+                      scrollController:
+                          FixedExtentScrollController(initialItem: selectSort),
+                      itemExtent: 30,
+                      onSelectedItemChanged: (index) {
+                        setState(() {
+                          selectSort = index;
+                        });
+                      },
+                      children: sort.map((e) => Text(e)).toList(),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _store.sortCardList(
+                          todoID: widget.todo!.id,
+                          selectSort: selectSort,
+                        );
+                      });
+                    },
+                    child: const Text(
+                      '並び替え',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             Expanded(
               child: ReorderableListView.builder(

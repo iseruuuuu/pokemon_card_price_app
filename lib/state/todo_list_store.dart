@@ -78,7 +78,7 @@ class TodoListStore {
   }
 
   void addCard(String shopName, String price, bool isSale, int? cardID) {
-    var id = count() == 0 ? 1 : _list.last.id + 1;
+    var id = cardCount() == 0 ? 1 : _cardList.last.id + 1;
     var createDate = getDate();
     var card = PokemonCard(id, shopName, price, isSale, createDate);
     _cardList.add(card);
@@ -159,5 +159,30 @@ class TodoListStore {
     pokemonCard.insert(newIndex, pokemonCard.removeAt(oldIndex));
     saveCard(cardID.toString());
     save();
+  }
+
+  void sortCardList({required int todoID, required int selectSort}) {
+    switch (selectSort) {
+      case 0:
+        //新しい順
+        _cardList.sort((a, b) => a.id.compareTo(b.id));
+        save();
+        saveCard(todoID.toString());
+        break;
+      case 1:
+        //店名（abc or あいうえお順）
+        break;
+      case 2:
+        //価格の安い順
+        break;
+      case 3:
+        //価格の高い順
+        break;
+      case 4:
+        //特価順（特価のみを上にする。その他の順番は気にしない）
+        break;
+      default:
+        break;
+    }
   }
 }
