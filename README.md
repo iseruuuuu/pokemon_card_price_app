@@ -80,6 +80,8 @@
 - [x] AndroidでSplash画面を実装する
 - [x] Androidアプリの名前を追加した
 - [x] Androidアプリのアイコンを追加した
+- [x] Androidで追加画面でOverflowしている
+- [x] Androidで自動でキーボードが出現している
 
 ## 具体的な解決方法
 
