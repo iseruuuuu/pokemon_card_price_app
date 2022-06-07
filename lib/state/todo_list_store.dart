@@ -13,6 +13,7 @@ class TodoListStore {
   static final TodoListStore _instance = TodoListStore._internal();
   List<PokemonCard> _searchCardList = [];
   bool isSearchEmpty = false;
+  bool isEmpty = false;
 
   TodoListStore._internal();
 
@@ -56,6 +57,14 @@ class TodoListStore {
     return _searchCardList[index];
   }
 
+  void checkListEmpty() {
+    if (_list.isEmpty) {
+      isEmpty = true;
+    } else {
+      isEmpty = false;
+    }
+  }
+
   String getDateTime() {
     var format = DateFormat("yyyy/MM/dd HH:mm");
     var dateTime = format.format(DateTime.now());
@@ -89,6 +98,7 @@ class TodoListStore {
     var todo = Todo(id, title, dateTime, dateTime, ball);
     _list.add(todo);
     save();
+    checkListEmpty();
   }
 
   void addCard(String shopName, int price, bool isSale, int? cardID) {
@@ -111,6 +121,7 @@ class TodoListStore {
     deleteAllCard(index: todo.id);
     _list.remove(todo);
     save();
+    checkListEmpty();
   }
 
   void deleteAllCard({required int index}) {
@@ -125,32 +136,25 @@ class TodoListStore {
 
   void save() async {
     var prefs = await SharedPreferences.getInstance();
-    // SharedPreferencesはプリミティブ型とString型リストしか扱えないため、以下の変換を行っている
-    // TodoList形式 → Map形式 → JSON形式 → StrigList形式
     var saveTargetList = _list.map((a) => json.encode(a.toJson())).toList();
     prefs.setStringList(_saveKey, saveTargetList);
   }
 
   void saveCard(String password) async {
     var prefs = await SharedPreferences.getInstance();
-    // SharedPreferencesはプリミティブ型とString型リストしか扱えないため、以下の変換を行っている
-    // TodoList形式 → Map形式 → JSON形式 → StrigList形式
     var saveTargetList = _cardList.map((a) => json.encode(a.toJson())).toList();
     prefs.setStringList(password, saveTargetList);
   }
 
   void load() async {
     var prefs = await SharedPreferences.getInstance();
-    // SharedPreferencesはプリミティブ型とString型リストしか扱えないため、以下の変換を行っている
-    // StrigList形式 → JSON形式 → Map形式 → TodoList形式
     var loadTargetList = prefs.getStringList(_saveKey) ?? [];
     _list = loadTargetList.map((a) => Todo.fromJson(json.decode(a))).toList();
+    checkListEmpty();
   }
 
   void loadCard(String? password) async {
     var prefs = await SharedPreferences.getInstance();
-    // SharedPreferencesはプリミティブ型とString型リストしか扱えないため、以下の変換を行っている
-    // StrigList形式 → JSON形式 → Map形式 → TodoList形式
     var loadTargetList = prefs.getStringList(password ?? '') ?? [];
     _cardList = loadTargetList
         .map((a) => PokemonCard.fromJson(json.decode(a)))

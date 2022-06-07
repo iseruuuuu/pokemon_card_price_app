@@ -5,6 +5,7 @@ import 'package:pokemon_card_price_app/gen/assets.gen.dart';
 import 'package:pokemon_card_price_app/model/todo.dart';
 import 'package:pokemon_card_price_app/parts/border_item.dart';
 import 'package:pokemon_card_price_app/parts/delete_dialog.dart';
+import 'package:pokemon_card_price_app/parts/empty_screen.dart';
 import 'package:pokemon_card_price_app/screen/todo_detail_screen.dart';
 import 'package:pokemon_card_price_app/screen/todo_input_screen.dart';
 import 'package:pokemon_card_price_app/state/todo_list_store.dart';
@@ -51,6 +52,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
     );
     openUpdateDialog(newVersion);
     loadStore();
+    _store.getTodo();
   }
 
   void loadStore() {
@@ -90,109 +92,111 @@ class _TodoListScreenState extends State<TodoListScreen> {
         ),
         backgroundColor: Colors.transparent,
       ),
-      body: ReorderableListView.builder(
-        onReorder: (int oldIndex, int newIndex) {
-          _store.onReorder(_store.getTodo(), oldIndex, newIndex);
-        },
-        itemCount: _store.count(),
-        itemBuilder: (context, index) {
-          var item = _store.findByIndex(index);
-          return Slidable(
-            key: ValueKey(index),
-            startActionPane: ActionPane(
-              key: ValueKey(index),
-              motion: const ScrollMotion(),
-              extentRatio: 0.25,
-              children: [
-                SlidableAction(
+      body: _store.isEmpty
+          ? const EmptyScreen()
+          : ReorderableListView.builder(
+              onReorder: (int oldIndex, int newIndex) {
+                _store.onReorder(_store.getTodo(), oldIndex, newIndex);
+              },
+              itemCount: _store.count(),
+              itemBuilder: (context, index) {
+                var item = _store.findByIndex(index);
+                return Slidable(
                   key: ValueKey(index),
-                  onPressed: (context) {
-                    _pushTodoInputPage(item);
-                  },
-                  backgroundColor: Colors.yellow,
-                  icon: Icons.edit,
-                  label: '編集',
-                ),
-              ],
-            ),
-            endActionPane: ActionPane(
-              key: ValueKey(index),
-              motion: const ScrollMotion(),
-              extentRatio: 0.25,
-              children: [
-                SlidableAction(
-                  key: ValueKey(index),
-                  onPressed: (context) {
-                    _store.loadCard(item.id.toString());
-                    showDialog<void>(
-                      context: context,
-                      builder: (_) {
-                        return DeleteDialog(
-                          onDelete: () {
-                            setState(() {
-                              _store.delete(
-                                todo: item,
-                              );
-                            });
-                          },
-                        );
-                      },
-                    );
-                  },
-                  backgroundColor: Colors.red,
-                  icon: Icons.edit,
-                  label: '削除',
-                ),
-              ],
-            ),
-            child: Container(
-              decoration: BoxDecoration(
-                border: index == 0
-                    ? BorderItem.borderFirst()
-                    : BorderItem.borderOther(),
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  _pushTodoDetailPage(item);
-                  _store.loadCard(item.id.toString());
-                },
-                child: ListTile(
-                  contentPadding: const EdgeInsets.only(
-                    left: 15,
-                    right: 10,
-                    top: 5,
-                    bottom: 5,
-                  ),
-                  key: ValueKey(index),
-                  title: Row(
+                  startActionPane: ActionPane(
+                    key: ValueKey(index),
+                    motion: const ScrollMotion(),
+                    extentRatio: 0.25,
                     children: [
-                      SizedBox(
-                        width: 40,
-                        height: 40,
-                        child: _store.ballItem(
-                          item.ball,
-                        ),
-                      ),
-                      const SizedBox(width: 15),
-                      Text(
-                        item.title,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      SlidableAction(
+                        key: ValueKey(index),
+                        onPressed: (context) {
+                          _pushTodoInputPage(item);
+                        },
+                        backgroundColor: Colors.yellow,
+                        icon: Icons.edit,
+                        label: '編集',
                       ),
                     ],
                   ),
-                  trailing: const Icon(
-                    Icons.list,
-                    size: 35,
+                  endActionPane: ActionPane(
+                    key: ValueKey(index),
+                    motion: const ScrollMotion(),
+                    extentRatio: 0.25,
+                    children: [
+                      SlidableAction(
+                        key: ValueKey(index),
+                        onPressed: (context) {
+                          _store.loadCard(item.id.toString());
+                          showDialog<void>(
+                            context: context,
+                            builder: (_) {
+                              return DeleteDialog(
+                                onDelete: () {
+                                  setState(() {
+                                    _store.delete(
+                                      todo: item,
+                                    );
+                                  });
+                                },
+                              );
+                            },
+                          );
+                        },
+                        backgroundColor: Colors.red,
+                        icon: Icons.edit,
+                        label: '削除',
+                      ),
+                    ],
                   ),
-                ),
-              ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: index == 0
+                          ? BorderItem.borderFirst()
+                          : BorderItem.borderOther(),
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        _pushTodoDetailPage(item);
+                        _store.loadCard(item.id.toString());
+                      },
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.only(
+                          left: 15,
+                          right: 10,
+                          top: 5,
+                          bottom: 5,
+                        ),
+                        key: ValueKey(index),
+                        title: Row(
+                          children: [
+                            SizedBox(
+                              width: 40,
+                              height: 40,
+                              child: _store.ballItem(
+                                item.ball,
+                              ),
+                            ),
+                            const SizedBox(width: 15),
+                            Text(
+                              item.title,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        trailing: const Icon(
+                          Icons.list,
+                          size: 35,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
       floatingActionButton: SizedBox(
         width: 85,
         height: 85,
