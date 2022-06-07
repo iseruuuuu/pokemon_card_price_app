@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:new_version/new_version.dart';
 import 'package:pokemon_card_price_app/gen/assets.gen.dart';
 import 'package:pokemon_card_price_app/model/todo.dart';
 import 'package:pokemon_card_price_app/parts/border_item.dart';
@@ -43,6 +44,12 @@ class _TodoListScreenState extends State<TodoListScreen> {
   @override
   void initState() {
     super.initState();
+    final newVersion = NewVersion(
+      androidId: 'com.pokemon_card_price_app',
+      iOSId: 'com.pokemonCardPriceApp',
+      iOSAppStoreCountry: 'JP',
+    );
+    openUpdateDialog(newVersion);
     loadStore();
   }
 
@@ -52,6 +59,23 @@ class _TodoListScreenState extends State<TodoListScreen> {
         _store.load();
       });
     });
+  }
+
+  void openUpdateDialog(NewVersion newVersion) async {
+    final status = await newVersion.getVersionStatus();
+    if (status != null && status.canUpdate) {
+      String storeVersion = status.storeVersion;
+      String releaseNote = status.releaseNotes.toString();
+      newVersion.showUpdateDialog(
+        context: context,
+        versionStatus: status,
+        dialogTitle: 'アップデートが必要です。',
+        dialogText:
+            'Ver.$storeVersionが公開されています。\n最新バージョンにアップデートをお願いします。\n\nバージョンアップ内容は以下の通りです。\n$releaseNote',
+        updateButtonText: 'アップデート',
+        allowDismissal: false,
+      );
+    }
   }
 
   @override
