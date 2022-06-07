@@ -3,6 +3,14 @@
 ## 現状のアプリ  
 ・ポケモンカードのお店ごとの値段を登録するアプリ  
 
+## アプリ画面
+
+| 画面１ |  画面２  |  画面３
+| ---- | ---- | ---- | 
+|  ![](https://user-images.githubusercontent.com/67954894/172390766-fcc138f9-3d13-484b-9ae6-e979cf243ad2.png)  | ![](https://user-images.githubusercontent.com/67954894/172390751-e6de2c03-2cdd-4a1f-b683-b72fa1a21c46.png) |  ![](https://user-images.githubusercontent.com/67954894/172390726-abecdcae-98e4-4140-8598-e971c48e8981.png) |  
+
+
+
 ##アップデート(1.01)
 ・リストを並び替えられるようにした。  
 ・デザインを一新した。  
