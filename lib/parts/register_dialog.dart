@@ -32,7 +32,7 @@ class _RegisterDialogState extends State<RegisterDialog> {
         children: [
           const SizedBox(height: 15),
           TextField(
-            autofocus: true,
+            autofocus: false,
             decoration: const InputDecoration(
               labelText: "店名",
               enabledBorder: OutlineInputBorder(
@@ -51,7 +51,7 @@ class _RegisterDialogState extends State<RegisterDialog> {
           ),
           const SizedBox(height: 15),
           TextField(
-            autofocus: true,
+            autofocus: false,
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
               labelText: '値段',
@@ -69,7 +69,6 @@ class _RegisterDialogState extends State<RegisterDialog> {
             controller: widget.priceController,
             onChanged: widget.onPriceChange,
           ),
-          const SizedBox(height: 15),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
