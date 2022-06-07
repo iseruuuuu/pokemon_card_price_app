@@ -37,9 +37,6 @@
 ## やることリスト(Android)
 - [ ] Androidアプリのアイコンを追加する
 - [ ] Androidアプリの名前を追加する
-- [ ] Androidアプリのスクショを作成する
-- [ ] アプリをGoogle Play Storeに提出する
-- [ ] AndroidでSplash画面を実装する
 
 ## やれたらいいなリスト
 - [ ] 画像検索して一番目に取得したい
@@ -80,6 +77,9 @@
 - [x] Cardリストの検索で空の時の画面を作成する
 - [x] 強制アップデートを追加した。
 - [x] Androidアプリがビルドできるようにした
+- [x] Androidアプリのスクショを作成する
+- [x] アプリをGoogle Play Storeに提出する
+- [x] AndroidでSplash画面を実装する
 
 ## 具体的な解決方法
 
