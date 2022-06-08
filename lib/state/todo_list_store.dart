@@ -14,6 +14,7 @@ class TodoListStore {
   List<PokemonCard> _searchCardList = [];
   bool isSearchEmpty = false;
   bool isEmpty = false;
+  bool isCardEmpty = false;
 
   TodoListStore._internal();
 
@@ -65,6 +66,14 @@ class TodoListStore {
     }
   }
 
+  void checkCardEmpty() {
+    if (_cardList.isEmpty) {
+      isCardEmpty = true;
+    } else {
+      isCardEmpty = false;
+    }
+  }
+
   String getDateTime() {
     var format = DateFormat("yyyy/MM/dd HH:mm");
     var dateTime = format.format(DateTime.now());
@@ -107,6 +116,7 @@ class TodoListStore {
     var card = PokemonCard(id, shopName, price, isSale, createDate);
     _cardList.add(card);
     saveCard(cardID.toString());
+    checkCardEmpty();
   }
 
   void update(Todo todo, [String? title]) {
@@ -127,11 +137,13 @@ class TodoListStore {
   void deleteAllCard({required int index}) {
     _cardList.clear();
     saveCard(index.toString());
+    checkCardEmpty();
   }
 
   void deleteCard(PokemonCard pokemonCard) {
     _cardList.remove(pokemonCard);
     saveCard(pokemonCard.id.toString());
+    checkCardEmpty();
   }
 
   void save() async {
@@ -159,6 +171,7 @@ class TodoListStore {
     _cardList = loadTargetList
         .map((a) => PokemonCard.fromJson(json.decode(a)))
         .toList();
+    checkCardEmpty();
   }
 
   void onReorder(List<Todo> todo, int oldIndex, int newIndex) {

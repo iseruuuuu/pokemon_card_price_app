@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pokemon_card_price_app/model/todo.dart';
 import 'package:pokemon_card_price_app/parts/border_item.dart';
 import 'package:pokemon_card_price_app/parts/card_dialog.dart';
+import 'package:pokemon_card_price_app/parts/empty_card_screen.dart';
 import 'package:pokemon_card_price_app/parts/empty_search_screen.dart';
 import 'package:pokemon_card_price_app/parts/register_dialog.dart';
 import 'package:pokemon_card_price_app/state/todo_list_store.dart';
@@ -138,101 +139,104 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
         ],
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              width: double.infinity,
-              height: 80,
-              color: Colors.black12,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
+        child: _store.isCardEmpty
+            ? const EmptyCardScreen()
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
                   Container(
-                    width: MediaQuery.of(context).size.width / 1.3,
+                    width: double.infinity,
+                    height: 80,
+                    color: Colors.black12,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width / 1.3,
+                          color: Colors.white,
+                          child: TextField(
+                            maxLength: 12,
+                            autocorrect: false,
+                            textInputAction: TextInputAction.search,
+                            decoration: const InputDecoration(
+                              counterText: '',
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black12,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black12,
+                                ),
+                              ),
+                            ),
+                            controller: searchTextController,
+                            onChanged: search,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: reset,
+                          iconSize: 40,
+                          icon: const Icon(Icons.close),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
                     color: Colors.white,
-                    child: TextField(
-                      maxLength: 12,
-                      autocorrect: false,
-                      textInputAction: TextInputAction.search,
-                      decoration: const InputDecoration(
-                        counterText: '',
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.black12,
+                    width: double.infinity,
+                    height: 150,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        SizedBox(
+                          height: 200,
+                          width: 250,
+                          child: CupertinoPicker(
+                            scrollController: FixedExtentScrollController(
+                              initialItem: selectSort,
+                            ),
+                            itemExtent: 30,
+                            onSelectedItemChanged: (index) {
+                              setState(() {
+                                selectSort = index;
+                              });
+                            },
+                            children: sort.map((e) => Text(e)).toList(),
                           ),
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.black12,
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              _store.sortCardList(
+                                todoID: widget.todo!.id,
+                                selectSort: selectSort,
+                              );
+                            });
+                          },
+                          child: const Text(
+                            '並び替え',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
                           ),
                         ),
-                      ),
-                      controller: searchTextController,
-                      onChanged: search,
+                      ],
                     ),
                   ),
-                  IconButton(
-                    onPressed: reset,
-                    iconSize: 40,
-                    icon: const Icon(Icons.close),
+                  Expanded(
+                    child: _store.isSearchEmpty
+                        ? const EmptySearchScreen()
+                        : !isSearch
+                            ? defaultListView()
+                            : searchListView(),
                   ),
                 ],
               ),
-            ),
-            Container(
-              color: Colors.white,
-              width: double.infinity,
-              height: 150,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  SizedBox(
-                    height: 200,
-                    width: 250,
-                    child: CupertinoPicker(
-                      scrollController:
-                          FixedExtentScrollController(initialItem: selectSort),
-                      itemExtent: 30,
-                      onSelectedItemChanged: (index) {
-                        setState(() {
-                          selectSort = index;
-                        });
-                      },
-                      children: sort.map((e) => Text(e)).toList(),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        _store.sortCardList(
-                          todoID: widget.todo!.id,
-                          selectSort: selectSort,
-                        );
-                      });
-                    },
-                    child: const Text(
-                      '並び替え',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: _store.isSearchEmpty
-                  ? const EmptySearchScreen()
-                  : !isSearch
-                      ? defaultListView()
-                      : searchListView(),
-            ),
-          ],
-        ),
       ),
     );
   }
