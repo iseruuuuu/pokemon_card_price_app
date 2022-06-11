@@ -254,7 +254,6 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
       itemCount: _store.cardCount(),
       itemBuilder: (context, index) {
         var item = _store.findCardByIndex(index);
-        //TODO Cellが空になっているかどうかのチェックをできるようにする
         return Slidable(
           key: ValueKey(index),
           endActionPane: ActionPane(
@@ -266,7 +265,7 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
                 key: ValueKey(index),
                 onPressed: (context) {
                   setState(() {
-                    _store.deleteCard(item);
+                    _store.deleteCard(item, widget.todo!.id.toString());
                   });
                 },
                 backgroundColor: Colors.red,
@@ -334,7 +333,6 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
       itemCount: _store.searchCardCount(),
       itemBuilder: (context, index) {
         var item = _store.findSearchByIndex(index);
-        //TODO Cellが空になっているかどうかのチェックをできるようにする
         return GestureDetector(
           onTap: () async {
             showDialog<void>(
@@ -374,7 +372,6 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
                 ),
               ),
               trailing: Text(
-                // item.price + '円',
                 '${item.price}円',
                 style: const TextStyle(
                   fontSize: 25,

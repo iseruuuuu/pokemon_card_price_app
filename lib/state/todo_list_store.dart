@@ -140,9 +140,9 @@ class TodoListStore {
     checkCardEmpty();
   }
 
-  void deleteCard(PokemonCard pokemonCard) {
+  void deleteCard(PokemonCard pokemonCard, String saveKey) {
     _cardList.remove(pokemonCard);
-    saveCard(pokemonCard.id.toString());
+    saveCard(saveKey);
     checkCardEmpty();
   }
 
